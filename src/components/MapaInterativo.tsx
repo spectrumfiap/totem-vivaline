@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker, Polyline, InfoWindow } from '@react-google-maps/api';
 
@@ -17,7 +15,7 @@ type Estacao = {
   nome: string;
   lat: number;
   lng: number;
-  horario_funcionamento: string;
+  horario_funcionamento?: string;  // nome correto do campo
   descricao: string;
 };
 
@@ -27,86 +25,12 @@ type Linha = {
   estacoes: Estacao[];
 };
 
-const mapaEscuroStyle = [
-  { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
-  {
-    featureType: 'administrative.locality',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#d59563' }]
-  },
-  {
-    featureType: 'poi',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#d59563' }]
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'geometry',
-    stylers: [{ color: '#263c3f' }]
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#6b9a76' }]
-  },
-  {
-    featureType: 'road',
-    elementType: 'geometry',
-    stylers: [{ color: '#38414e' }]
-  },
-  {
-    featureType: 'road',
-    elementType: 'geometry.stroke',
-    stylers: [{ color: '#212a37' }]
-  },
-  {
-    featureType: 'road',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#9ca5b3' }]
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry',
-    stylers: [{ color: '#746855' }]
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry.stroke',
-    stylers: [{ color: '#1f2835' }]
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#f3d19c' }]
-  },
-  {
-    featureType: 'transit',
-    elementType: 'geometry',
-    stylers: [{ color: '#2f3948' }]
-  },
-  {
-    featureType: 'transit.station',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#d59563' }]
-  },
-  {
-    featureType: 'water',
-    elementType: 'geometry',
-    stylers: [{ color: '#17263c' }]
-  },
-  {
-    featureType: 'water',
-    elementType: 'labels.text.fill',
-    stylers: [{ color: '#515c6d' }]
-  },
-  {
-    featureType: 'water',
-    elementType: 'labels.text.stroke',
-    stylers: [{ color: '#17263c' }]
-  }
-];
+const icons: Record<string, string> = {
+  Amarela: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+  Lilás: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png",
+  Diamante: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  Esmeralda: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+};
 
 const legendaStyle: React.CSSProperties = {
   position: "absolute",
@@ -134,7 +58,10 @@ const MapaGoogle = () => {
   useEffect(() => {
     fetch('/linhas.json')
       .then(res => res.json())
-      .then(data => setLinhas(data));
+      .then(data => {
+        console.log('Dados das linhas carregadas:', data);
+        setLinhas(data);
+      });
   }, []);
 
   return (
@@ -143,11 +70,9 @@ const MapaGoogle = () => {
         mapContainerStyle={containerStyle}
         center={center}
         zoom={12}
-        options={{ styles: mapaEscuroStyle }}
       >
         {linhas.map((linha, idx) => (
           <React.Fragment key={idx}>
-            {/* Polyline da linha */}
             <Polyline
               path={linha.estacoes.map(est => ({ lat: est.lat, lng: est.lng }))}
               options={{
@@ -157,25 +82,17 @@ const MapaGoogle = () => {
               }}
             />
 
-            {/* Marcadores das estações - pontos brancos */}
             {linha.estacoes.map((est, i) => (
               <Marker
                 key={i}
                 position={{ lat: est.lat, lng: est.lng }}
-                icon={{
-                  path: "M0 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0", // círculo
-                  fillColor: "white",
-                  fillOpacity: 1,
-                  strokeWeight: 0,
-                  scale: 1
-                }}
+                icon={icons[linha.nome]}
                 onClick={() => setSelectedEstacao({ ...est, linhaNome: linha.nome })}
               />
             ))}
           </React.Fragment>
         ))}
 
-        {/* Popup InfoWindow */}
         {selectedEstacao && (
           <InfoWindow
             position={{ lat: selectedEstacao.lat, lng: selectedEstacao.lng }}
@@ -191,7 +108,7 @@ const MapaGoogle = () => {
                 {selectedEstacao.linhaNome}
               </p>
               <p style={{ margin: "4px 0 0" }}>
-                <strong>Horário:</strong> {selectedEstacao.horario_funcionamento}
+                <strong>Horário:</strong> {selectedEstacao.horario_funcionamento ?? "Não informado"}
               </p>
               <p style={{ margin: "4px 0 0" }}>
                 {selectedEstacao.descricao}
@@ -200,7 +117,6 @@ const MapaGoogle = () => {
           </InfoWindow>
         )}
 
-        {/* Legenda fixa */}
         <div style={legendaStyle}>
           {linhas.map(linha => (
             <LinhaLegenda key={linha.nome} nome={linha.nome} cor={linha.cor} />
