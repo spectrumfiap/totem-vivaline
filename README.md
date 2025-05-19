@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚄 Totem Interativo CCR (VivaLine)
 
-## Getting Started
+Nosso projeto propõe o desenvolvimento de um sistema integrado para totens interativos voltado aos passageiros e funcionários das estações de metrô da CCR.
+O objetivo é atuar como um guia completo, oferecendo suporte com mapas do metrô, informações detalhadas sobre as estações e serviços disponíveis), localização de pontos comerciais, além de atualizações e notícias sobre o que está acontecendo no metrô.
+O sistema também fornecerá atendimento especializado, respostas a dúvidas frequentes e orientações sobre o funcionamento do metrô.
+Além disso, o totem contará com um assistente virtual para prestar suporte em tempo real, auxiliando os passageiros em qualquer necessidade.
 
-First, run the development server:
+## 🌟 Funcionalidades Principais
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🖥 Interface intuitiva e de fácil navegação.
+- 🤖 *Chatbot* para responder dúvidas dos usuários.
+- 🗺️ *Mapa Interativo* para visualização dinâmica das estações e locais de interesse.
+- 🚆 *Status das Linhas* atualizado em tempo real.
+- 🏪 *Comércios Locais* para exibição de estabelecimentos próximos às estações.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Como Rodar o Projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Para rodar o projeto localmente, siga os passos abaixo:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Abra seu terminal e rode o comando: "cd vivalinesprint".
+2. Instale todas as dependências usando: "npm install".
+3. E para rodar o projeto localmente use: "npm run dev".
+   
 
-## Learn More
+## 👥 Equipe de Desenvolvimento
+- Luann Noqueli - RM 560313
+- Arthur Thomas - RM 561061
+- Jhonatta Lima - RM 560277
 
-To learn more about Next.js, take a look at the following resources:
+## 💬 Contato
+Para entrar em contato, envie um e-mail para:
+- **Email:** challengersfiap@gmail.com
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🙌 Agradecimentos
+Obrigado pelo seu tempo! Qualquer ideia ou contribuição será bem-vinda!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+💡 **Desenvolvido pelo grupo Spectrum [VivaLine]
+(https://github.com/spectrumfiap/VIVALINE)
