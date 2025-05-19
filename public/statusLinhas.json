@@ -1,0 +1,26 @@
+[
+  {
+    "nome": "Amarela",
+    "cor": "bg-yellow-400",
+    "status": "Operação normal",
+    "circulo": "bg-green-500"
+  },
+  {
+    "nome": "Lilás",
+    "cor": "bg-purple-400",
+    "status": "Interrompida",
+    "circulo": "bg-red-500"
+  },
+  {
+    "nome": "Diamante",
+    "cor": "bg-gray-500",
+    "status": "Operação parcial",
+    "circulo": "bg-yellow-600"
+  },
+  {
+    "nome": "Esmeralda",
+    "cor": "bg-teal-400",
+    "status": "Operação normal",
+    "circulo": "bg-green-500"
+  }
+]
