@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🚄 Totem Interativo CCR (VivaLine)
 
 Nosso projeto propõe o desenvolvimento de um sistema integrado para totens interativos voltado aos passageiros e funcionários das estações de metrô da CCR.
@@ -30,7 +29,7 @@ Para rodar o projeto localmente, siga os passos abaixo:
 
 ## 💬 Contato
 Para entrar em contato, envie um e-mail para:
-- **Email:** challengersfiap@gmail.com
+- **Email:** spectrumfiap@gmail.com
 
 ## 🙌 Agradecimentos
 Obrigado pelo seu tempo! Qualquer ideia ou contribuição será bem-vinda!
@@ -38,8 +37,5 @@ Obrigado pelo seu tempo! Qualquer ideia ou contribuição será bem-vinda!
 ---
 
 💡 **Desenvolvido pelo grupo Spectrum [VivaLine]
-(https://github.com/spectrumfiap/VIVALINE)
-=======
-# totem-vivaline
-Site do projeto do totem Vivaline, criado para informar passageiros sobre linhas, estações, horários da malha ferroviária operada pela CCR e mais. Desenvolvido com foco em acessibilidade, usabilidade e integração de tecnologias web. Projeto acadêmico multidisciplinar.
->>>>>>> 900ee46a0bb4808ffdef1d3439fa4f74c0e244e3
+(https://github.com/spectrumfiap/totem-vivaline)
+
