@@ -8,8 +8,8 @@
   {
     "nome": "Lilás",
     "cor": "bg-purple-400",
-    "status": "Interrompida",
-    "circulo": "bg-red-500"
+    "status": "Operação parcial",
+    "circulo": "bg-yellow-600"
   },
   {
     "nome": "Diamante",
