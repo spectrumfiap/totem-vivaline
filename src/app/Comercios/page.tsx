@@ -1,40 +1,65 @@
-import React from 'react'
-import Image from 'next/image'
- const ComerciosLocais = () => {
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+
+const ComerciosLocais = () => {
+  const [comercios, setComercios] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/comercios", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "eb24e9b8-35b9-48e4-97e9-8257903f0288", 
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Dados recebidos:", data);
+        setComercios(data);
+      })
+      .catch((err) => console.error("Erro ao buscar comércios:", err));
+  }, []);
+
   return (
-    <main className="flex-1 flex justify-between px-8 items-center gap-[10vw] ">
-      <div className="w-[45%] text-center flex flex-col gap-6 md:gap-16 lg:gap-16 mb-40">
-        <div className="flex items-center self-center gap-1 md:gap-8 lg:gap-8">
-          <Image className="md:pt-4 w-6 md:w-[50px] lg:w-[50px] " src="/assets/ViaMobilidade.svg" alt="ViaMobilidade-fundo" width={50} height={50}/>
-          <h1 className="font-medium md:pt-4 text-[1rem] md:text-[1.5rem] lg:text-[2.6rem]">
+    <main className="flex-1 flex flex-col items-center px-8 py-10">
+      <div className="w-full max-w-4xl">
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <Image
+            className="w-10 md:w-14"
+            src="/assets/ViaMobilidade.svg"
+            alt="ViaMobilidade"
+            width={50}
+            height={50}
+          />
+          <h1 className="text-2xl md:text-4xl font-semibold">
             Estação Paulista
           </h1>
         </div>
-        
 
-          <h2 className="font-normal text-[1rem] md:text-[1.5rem] lg:text-[2.5rem]">
-            Loja 1: Chilli Beans
-          </h2>
-
-          <p className="font-normal text-[1rem] lg:text-[1.5rem]">
-            Instalada na estação desde 2012, tem como produto mais vendido atualmente os óculos temáticos dos Beatles (a partir de 198 reais).  A loja trabalha ainda com relógios de pulso.
-          </p>
-
-          <p className="font-normal text-[1rem] lg:text-[1.5rem]">
-            7h/22h (seg. a sex.); 8h/18h (sáb.). Telefone: 4114-8992. Localização: Terceiro piso a partir do acesso localizado na Rua da Consolação. 
-          </p>
+        {comercios.length > 0 ? (
+          comercios.map((comercio, index) => (
+            <div
+              key={index}
+              className="mb-10 p-6 rounded-2xl shadow-md bg-white text-center"
+            >
+              <h2 className="text-xl md:text-2xl font-medium">
+                Loja {index + 1}: {comercio.nome}
+              </h2>
+              <p className="text-base md:text-lg mt-2">{comercio.descricao}</p>
+              <p className="text-sm md:text-base mt-2">{comercio.horario}</p>
+              <p className="text-sm md:text-base mt-1">{comercio.telefone}</p>
+              <p className="text-sm md:text-base mt-1">
+                Localização: {comercio.localizacao}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">Carregando comércios...</p>
+        )}
       </div>
-      
-
-
-      <div className="w-[55%]">
-        <Image width={1500} height={1500} src="./assets/ChiliBeans.svg" alt="Imagem chili" />
-      </div>
-      
-
-
-
     </main>
-  )
-}
-export default ComerciosLocais
+  );
+};
+
+export default ComerciosLocais;
