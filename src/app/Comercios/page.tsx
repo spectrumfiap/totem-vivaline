@@ -2,15 +2,21 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
+interface Comercio {
+  nome: string;
+  endereco: string;
+  telefone: string;
+}
+
 const ComerciosLocais = () => {
-  const [comercios, setComercios] = useState([]);
+  const [comercios, setComercios] = useState<Comercio[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/comercios", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": "eb24e9b8-35b9-48e4-97e9-8257903f0288", 
+        "x-api-key": "1234",
       },
     })
       .then((res) => res.json())
@@ -24,7 +30,8 @@ const ComerciosLocais = () => {
   return (
     <main className="flex-1 flex flex-col items-center px-8 py-10">
       <div className="w-full max-w-4xl">
-        <div className="flex items-center justify-center gap-4 mb-10">
+        {/* Logo + Título */}
+        <div className="flex items-center justify-center gap-4 mb-6">
           <Image
             className="w-10 md:w-14"
             src="/assets/ViaMobilidade.svg"
@@ -37,6 +44,18 @@ const ComerciosLocais = () => {
           </h1>
         </div>
 
+        {/* Imagem decorativa */}
+        <div className="mb-10 flex justify-center">
+          <Image
+            src="/assets/chillibeans.jpg" // 
+            alt="Imagem da Estação Paulista"
+            width={800}
+            height={400}
+            className="rounded-2xl shadow-lg"
+          />
+        </div>
+
+        {/* Lista de comércios */}
         {comercios.length > 0 ? (
           comercios.map((comercio, index) => (
             <div
@@ -46,16 +65,16 @@ const ComerciosLocais = () => {
               <h2 className="text-xl md:text-2xl font-medium">
                 Loja {index + 1}: {comercio.nome}
               </h2>
-              <p className="text-base md:text-lg mt-2">{comercio.descricao}</p>
-              <p className="text-sm md:text-base mt-2">{comercio.horario}</p>
-              <p className="text-sm md:text-base mt-1">{comercio.telefone}</p>
+              <p className="text-base md:text-lg mt-2">
+                Endereço: {comercio.endereco}
+              </p>
               <p className="text-sm md:text-base mt-1">
-                Localização: {comercio.localizacao}
+                Telefone: {comercio.telefone}
               </p>
             </div>
           ))
         ) : (
-          <p className="text-gray-500">Carregando comércios...</p>
+          <p className="text-gray-500 text-center mt-6">Carregando comércios...</p>
         )}
       </div>
     </main>

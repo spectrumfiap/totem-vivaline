@@ -22,7 +22,7 @@ export default function FAQ() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'X-Api-Key': 'eb24e9b8-35b9-48e4-97e9-8257903f0288'
+        'X-Api-Key': '1234'
       },
     })
       .then((res) => {

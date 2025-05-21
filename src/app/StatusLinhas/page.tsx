@@ -16,7 +16,7 @@ const Status = () => {
     fetch('http://localhost:8080/statuslinhas', {  // atualize a URL se seu backend estiver em outro endereço/porta
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'eb24e9b8-35b9-48e4-97e9-8257903f0288', // sua API key
+        'x-api-key': '1234', // sua API key
       }
     })
       .then((res) => {
