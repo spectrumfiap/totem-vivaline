@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Footer from "@/components/Footer/page"; // ajuste o path se necessário
 
 const Cadastro = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [errors, setErrors] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ nome: "", email: "", senha: "" });
+  const [errors, setErrors] = useState({ nome: "", email: "", senha: "" });
+  const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -13,15 +15,15 @@ const Cadastro = () => {
   };
 
   const validate = () => {
-    let formErrors = { name: "", email: "", password: "" };
+    let formErrors = { nome: "", email: "", senha: "" };
     let isValid = true;
 
-    if (!form.name) {
-      formErrors.name = "Nome é obrigatório.";
+    if (!form.nome) {
+      formErrors.nome = "Nome é obrigatório.";
       isValid = false;
     }
 
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!form.email) {
       formErrors.email = "E-mail é obrigatório.";
       isValid = false;
@@ -30,11 +32,11 @@ const Cadastro = () => {
       isValid = false;
     }
 
-    if (!form.password) {
-      formErrors.password = "Senha é obrigatória.";
+    if (!form.senha) {
+      formErrors.senha = "Senha é obrigatória.";
       isValid = false;
-    } else if (form.password.length < 6) {
-      formErrors.password = "A senha deve ter pelo menos 6 caracteres.";
+    } else if (form.senha.length < 6) {
+      formErrors.senha = "A senha deve ter pelo menos 6 caracteres.";
       isValid = false;
     }
 
@@ -42,92 +44,121 @@ const Cadastro = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setServerError("");
 
-    if (validate()) {
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const userExists = users.find((user: any) => user.email === form.email);
-
-      if (userExists) {
-        alert("E-mail já cadastrado!");
-        setIsSubmitting(false);
-        return;
-      }
-
-      users.push(form);
-      localStorage.setItem("users", JSON.stringify(users));
-      
-      alert("Cadastro realizado com sucesso!");
+    if (!validate()) {
       setIsSubmitting(false);
-      setForm({ name: "", email: "", password: "" });
-      router.push("/login");
-    } else {
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "1234",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const text = await response.text();
+      console.log("Resposta backend:", response.status, text);
+
+      if (response.status === 201) {
+        alert("Cadastro realizado com sucesso!");
+        setForm({ nome: "", email: "", senha: "" });
+        router.push("/login");
+      } else if (response.status === 409) {
+        setServerError(text || "E-mail já cadastrado.");
+      } else {
+        setServerError(text || "Erro inesperado ao registrar.");
+      }
+    } catch (error) {
+      setServerError("Erro ao conectar com o servidor.");
+      console.error("Erro no fetch:", error);
+    } finally {
       setIsSubmitting(false);
     }
   };
 
-  
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-center mb-4">Cadastre-se</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            name="name"
-            placeholder="Nome"
-            value={form.name}
-            onChange={handleChange}
-            required
-            className="w-80 p-2 border border-gray-300 rounded"
-          />
-          {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow flex items-center justify-center bg-gray-50">
+        <div className="max-w-md w-full p-6 bg-white rounded shadow-md">
+          <h2 className="text-2xl font-semibold text-center mb-4">Cadastro</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                name="nome"
+                placeholder="Nome"
+                value={form.nome}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+              {errors.nome && (
+                <p className="text-red-500 text-sm mt-1">{errors.nome}</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                name="email"
+                type="email"
+                placeholder="E-mail"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                name="senha"
+                type="password"
+                placeholder="Senha"
+                value={form.senha}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+              {errors.senha && (
+                <p className="text-red-500 text-sm mt-1">{errors.senha}</p>
+              )}
+            </div>
+
+            {serverError && (
+              <p className="text-red-500 text-sm text-center">{serverError}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              {isSubmitting ? "Enviando..." : "Cadastrar"}
+            </button>
+
+            <a
+              href="/login"
+              className="text-sm font-semibold text-center block mt-4 text-blue-600 hover:underline"
+            >
+              Já tem conta? Entrar
+            </a>
+          </form>
         </div>
-        <div>
-          <input
-            name="email"
-            type="email"
-            placeholder="E-mail"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-80 p-2 border border-gray-300 rounded"
-          />
-          {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
-        </div>
-        <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="Senha"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="w-80 p-2 border border-gray-300 rounded"
-          />
-          <br />
-          {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
-        </div>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          {isSubmitting ? "Enviando..." : "Cadastrar"}
-        </button>
-        <a href="../login" className="text-sm font-semibold text-center mb-4">Login</a>
-      </form>
+      </main>
+
+      
     </div>
   );
 };
 
-const Page: React.FC = () => {
-  return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-white to-[#C7CDCF]">
-      <Cadastro />
-    </div>
-  );
-};
-
-export default Page;
+export default Cadastro;

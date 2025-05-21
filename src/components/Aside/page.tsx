@@ -37,7 +37,6 @@ const Aside = () => {
             </h2>
             <span className="text-sm">{noticia.data}</span>
             <br />
-            <span className="text-md underline cursor-pointer">Ver mais</span>
           </li>
         ))}
       </ul>

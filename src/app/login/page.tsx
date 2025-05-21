@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+// import Footer from "@/components/Footer/page"; // ajuste o caminho se quiser usar
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -12,73 +13,87 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
 
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find(
-      (user: any) => user.email === form.email && user.password === form.password
-    );
+    try {
+      const response = await fetch("http://localhost:8080/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "1234", // sua chave API
+        },
+        body: JSON.stringify({ email: form.email, senha: form.password }), // backend espera "senha"
+        credentials: "include", // muito importante para enviar/receber cookie HttpOnly
+      });
 
-    if (user) {
-      localStorage.setItem("loggedUser", JSON.stringify(user));
+      if (!response.ok) {
+        const msg = await response.text();
+        throw new Error(msg || "E-mail ou senha inválidos.");
+      }
+
+      // Não tenta pegar token, pois o JWT está em cookie HttpOnly
+
       alert("Login realizado com sucesso!");
-      setIsSubmitting(false);
-      router.push("/");
-    } else {
-      setError("E-mail ou senha incorretos.");
+      router.push("/"); // ou rota protegida
+
+    } catch (err: any) {
+      setError(err.message || "Erro no login.");
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            name="email"
-            type="email"
-            placeholder="E-mail"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-80 p-2 border border-gray-300 rounded"
-          />
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow flex items-center justify-center bg-gray-50">
+        <div className="max-w-md w-full p-6 bg-white rounded shadow-md">
+          <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                name="email"
+                type="email"
+                placeholder="E-mail"
+                value={form.email}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div>
+              <input
+                name="password"
+                type="password"
+                placeholder="Senha"
+                value={form.password}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              {isSubmitting ? "Enviando..." : "Entrar"}
+            </button>
+            <a
+              href="/cadastro"
+              className="text-sm font-semibold text-center block mt-4 text-blue-600 hover:underline"
+            >
+              Cadastrar-se
+            </a>
+          </form>
         </div>
-        <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="Senha"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="w-80 p-2 border border-gray-300 rounded"
-          />
-        </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          {isSubmitting ? "Enviando..." : "Entrar"}
-        </button>
-        <a href="../cadastro" className="text-sm font-semibold text-center mb-4">Cadastrar-se</a>
-      </form>
+      </main>
+      {/* <Footer /> */}
     </div>
   );
 };
 
-const Page: React.FC = () => {
-  return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-b from-white to-[#C7CDCF]">
-      <Login />
-    </div>
-  );
-};
-
-export default Page;
+export default Login;
