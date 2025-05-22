@@ -13,18 +13,15 @@ const UsersCrud = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Buscar por ID
   const [buscarId, setBuscarId] = useState("");
   const [userEncontrado, setUserEncontrado] = useState<User | null>(null);
 
-  // Criar novo usuário
   const [novoUser, setNovoUser] = useState<User>({
     nome: "",
     email: "",
     senha: "",
   });
 
-  // Atualizar usuário
   const [atualizarId, setAtualizarId] = useState("");
   const [userAtualizar, setUserAtualizar] = useState<User>({
     nome: "",
@@ -32,7 +29,6 @@ const UsersCrud = () => {
     senha: "",
   });
 
-  // Deletar usuário
   const [deletarId, setDeletarId] = useState("");
 
   const API_URL = "http://localhost:8080/users";
@@ -51,7 +47,7 @@ const UsersCrud = () => {
         if (!res.ok) throw new Error(`Erro ao listar: ${res.statusText}`);
         return res.json();
       })
-      .then((data) => setUsers(data))
+      .then((data: User[]) => setUsers(data))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   };
@@ -70,7 +66,7 @@ const UsersCrud = () => {
         if (!res.ok) throw new Error(`Erro ao buscar: ${res.statusText}`);
         return res.json();
       })
-      .then((data) => setUserEncontrado(data))
+      .then((data: User) => setUserEncontrado(data))
       .catch((err) => {
         setError(err.message);
         setUserEncontrado(null);
@@ -163,12 +159,18 @@ const UsersCrud = () => {
     listarTodos();
   }, []);
 
-  const handleChange = (
+  const handleChange = <
+    K extends keyof User
+  >(
     e: ChangeEvent<HTMLInputElement>,
     setState: (val: User) => void,
     state: User
   ) => {
-    setState({ ...state, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    } as User);
   };
 
   return (
@@ -225,13 +227,13 @@ const UsersCrud = () => {
       {/* Criar novo usuário */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-2">Adicionar Novo Usuário</h2>
-        {["nome", "email", "senha"].map((field) => (
+        {(Object.keys(novoUser) as (keyof User)[]).filter(k => k !== 'id').map((field) => (
           <input
             key={field}
             name={field}
             type={field === "email" ? "email" : "text"}
             placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-            value={(novoUser as any)[field]}
+            value={novoUser[field]}
             onChange={(e) => handleChange(e, setNovoUser, novoUser)}
             className="border p-2 rounded mr-2 mb-2"
           />
@@ -255,13 +257,13 @@ const UsersCrud = () => {
           onChange={(e) => setAtualizarId(e.target.value)}
           className="border p-2 rounded mr-2 mb-2"
         />
-        {["nome", "email", "senha"].map((field) => (
+        {(Object.keys(userAtualizar) as (keyof User)[]).filter(k => k !== 'id').map((field) => (
           <input
             key={field}
             name={field}
             type={field === "email" ? "email" : "text"}
             placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-            value={(userAtualizar as any)[field]}
+            value={userAtualizar[field]}
             onChange={(e) => handleChange(e, setUserAtualizar, userAtualizar)}
             className="border p-2 rounded mr-2 mb-2"
           />

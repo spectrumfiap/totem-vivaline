@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 
 interface LinhaStatus {
   id?: number;
@@ -14,11 +14,9 @@ const StatusLinhasCrud = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Buscar por ID
   const [buscarId, setBuscarId] = useState("");
   const [linhaEncontrada, setLinhaEncontrada] = useState<LinhaStatus | null>(null);
 
-  // Criar nova linha
   const [novaLinha, setNovaLinha] = useState<LinhaStatus>({
     nome: "",
     cor: "",
@@ -26,7 +24,6 @@ const StatusLinhasCrud = () => {
     circulo: "",
   });
 
-  // Atualizar linha
   const [atualizarId, setAtualizarId] = useState("");
   const [linhaAtualizar, setLinhaAtualizar] = useState<LinhaStatus>({
     nome: "",
@@ -35,7 +32,6 @@ const StatusLinhasCrud = () => {
     circulo: "",
   });
 
-  // Deletar linha
   const [deletarId, setDeletarId] = useState("");
 
   const API_URL = "http://localhost:8080/statuslinhas";
@@ -55,7 +51,7 @@ const StatusLinhasCrud = () => {
         if (!res.ok) throw new Error(`Erro ao listar: ${res.statusText}`);
         return res.json();
       })
-      .then((data) => {
+      .then((data: LinhaStatus[]) => {
         if (Array.isArray(data)) {
           setStatusLinhas(data);
         } else {
@@ -63,9 +59,12 @@ const StatusLinhasCrud = () => {
           setStatusLinhas([]);
         }
         setLoading(false);
-        console.log("Resposta da API:", data); 
+        console.log("Resposta da API:", data);
       })
-      ;
+      .catch((err: Error) => {
+        setError(err.message);
+        setLoading(false);
+      });
   };
 
   const buscarPorId = () => {
@@ -83,8 +82,8 @@ const StatusLinhasCrud = () => {
         if (!res.ok) throw new Error(`Erro ao buscar: ${res.statusText}`);
         return res.json();
       })
-      .then((data) => setLinhaEncontrada(data))
-      .catch((err) => {
+      .then((data: LinhaStatus) => setLinhaEncontrada(data))
+      .catch((err: Error) => {
         setError(err.message);
         setLinhaEncontrada(null);
       });
@@ -113,7 +112,7 @@ const StatusLinhasCrud = () => {
           throw new Error(`Erro ao criar: ${res.statusText}`);
         }
       })
-      .catch((err) => setError(err.message));
+      .catch((err: Error) => setError(err.message));
   };
 
   const atualizarLinha = () => {
@@ -141,7 +140,7 @@ const StatusLinhasCrud = () => {
           throw new Error(`Erro ao atualizar: ${res.statusText}`);
         }
       })
-      .catch((err) => setError(err.message));
+      .catch((err: Error) => setError(err.message));
   };
 
   const deletarLinha = () => {
@@ -162,7 +161,16 @@ const StatusLinhasCrud = () => {
           throw new Error(`Erro ao deletar: ${res.statusText}`);
         }
       })
-      .catch((err) => setError(err.message));
+      .catch((err: Error) => setError(err.message));
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    obj: LinhaStatus,
+    setObj: React.Dispatch<React.SetStateAction<LinhaStatus>>
+  ) => {
+    const { name, value } = e.target;
+    setObj({ ...obj, [name]: value });
   };
 
   useEffect(() => {
@@ -228,10 +236,11 @@ const StatusLinhasCrud = () => {
         {["nome", "cor", "status", "circulo"].map((field) => (
           <input
             key={field}
+            name={field}
             type="text"
             placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-            value={(novaLinha as any)[field]}
-            onChange={(e) => setNovaLinha({ ...novaLinha, [field]: e.target.value })}
+            value={novaLinha[field as keyof LinhaStatus]}
+            onChange={(e) => handleInputChange(e, novaLinha, setNovaLinha)}
             className="border p-2 rounded mr-2 mb-2"
           />
         ))}
@@ -257,10 +266,11 @@ const StatusLinhasCrud = () => {
         {["nome", "cor", "status", "circulo"].map((field) => (
           <input
             key={field}
+            name={field}
             type="text"
             placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-            value={(linhaAtualizar as any)[field]}
-            onChange={(e) => setLinhaAtualizar({ ...linhaAtualizar, [field]: e.target.value })}
+            value={linhaAtualizar[field as keyof LinhaStatus]}
+            onChange={(e) => handleInputChange(e, linhaAtualizar, setLinhaAtualizar)}
             className="border p-2 rounded mr-2 mb-2"
           />
         ))}
