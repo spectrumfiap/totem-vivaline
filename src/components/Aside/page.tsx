@@ -13,7 +13,7 @@ const Aside = () => {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const res = await fetch("http://localhost:8080/noticias", {
+        const res = await fetch("https://api-vivaline.onrender.com/noticias", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

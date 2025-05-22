@@ -1,4 +1,5 @@
 "use client";
+import { API_KEY, API_URL } from "@/app/services/api";
 import React, { useEffect, useState } from "react";
 
 interface Duvida {
@@ -24,9 +25,6 @@ const DuvidasCrud = () => {
   });
 
   const [deletarId, setDeletarId] = useState("");
-
-  const API_URL = "http://localhost:8080/duvidas";
-  const API_KEY = "1234";
 
   const listarTodos = () => {
     setLoading(true);

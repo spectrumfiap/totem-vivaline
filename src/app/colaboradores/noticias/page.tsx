@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { API_KEY, API_URL } from '@/app/services/api';
 
 interface Noticia {
   id?: number;
@@ -28,9 +29,6 @@ const NoticiasCrud = () => {
   });
 
   const [deletarId, setDeletarId] = useState('');
-
-  const API_URL = 'http://localhost:8080/noticias';
-  const API_KEY = '1234';
 
   const listarNoticias = () => {
     setLoading(true);

@@ -1,4 +1,5 @@
 "use client";
+import { API_KEY, API_URL } from "@/app/services/api";
 import React, { useEffect, useState } from "react";
 
 interface Comercio {
@@ -30,9 +31,7 @@ const ComerciosCrud = () => {
   });
 
   const [deletarId, setDeletarId] = useState("");
-
-  const API_URL = "http://localhost:8080/comercios";
-  const API_KEY = "1234";
+  
 
   // Listar todos
   const listarTodos = () => {

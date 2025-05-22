@@ -18,7 +18,7 @@ export default function FAQ() {
   };
 
   useEffect(() => {
-    fetch('http://localhost:8080/duvidas', {
+    fetch('https://api-vivaline.onrender.com/duvidas', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

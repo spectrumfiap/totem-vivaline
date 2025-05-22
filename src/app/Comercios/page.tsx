@@ -12,7 +12,7 @@ const ComerciosLocais = () => {
   const [comercios, setComercios] = useState<Comercio[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/comercios", {
+    fetch("https://api-vivaline.onrender.com/comercios", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

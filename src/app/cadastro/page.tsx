@@ -54,7 +54,7 @@ const Cadastro = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/users", {
+      const response = await fetch("https://api-vivaline.onrender.com/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
