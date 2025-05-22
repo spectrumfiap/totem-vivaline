@@ -22,7 +22,7 @@ const Home = () => {
                     </li>
 
                     <li className="flex justify-center">
-                        <Link href="/statuslinhas">
+                        <Link href="/StatusLinhas">
                             <Image
                                 className="transition duration-300 ease-in-out hover:shadow-lg hover:scale-105"
                                 src="/assets/status-linhas-semfundo.png"
@@ -34,7 +34,7 @@ const Home = () => {
                     </li>
 
                     <li className="flex justify-center">
-                        <Link href="/comercios">
+                        <Link href="/Comercios">
                             <Image
                                 className="transition duration-300 ease-in-out hover:shadow-lg hover:scale-105"
                                 src="/assets/comercios-locais-semfundo.png"
@@ -46,7 +46,7 @@ const Home = () => {
                     </li>
 
                     <li className="flex justify-center">
-                        <Link href="/chatbot">
+                        <Link href="/Chatbot">
                             <Image
                                 className="transition duration-300 ease-in-out hover:shadow-lg hover:scale-105"
                                 src="/assets/assistente-virtual-semfundo.png"
