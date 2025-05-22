@@ -23,10 +23,10 @@ const Header = () => {
 
       <ul className="flex items-center gap-3.5 sm:gap-4 lg:gap-8 pt-2 sm:pt-4">
         <li className="text-white text-xs sm:text-sm md:text-base lg:text-2xl">
-          <Link href="/quemsomos">Quem somos?</Link>
+          <Link href="/QuemSomos">Quem somos?</Link>
         </li>
         <li className="text-white text-xs sm:text-sm md:text-base lg:text-2xl">
-          <Link href="/duvidas">Dúvidas frequentes</Link>
+          <Link href="/Duvidas">Dúvidas frequentes</Link>
         </li>
         <li className="text-white text-xs sm:text-sm md:text-base lg:text-2xl">
           <Link href="/colaboradores">Área do Colaborador</Link>

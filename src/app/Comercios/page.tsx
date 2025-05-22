@@ -13,7 +13,7 @@ const AsideComercios = () => {
   useEffect(() => {
     const fetchComercios = async () => {
       try {
-        const res = await fetch("https://api-vivaline.onrender.com/comercios", {
+        const res = await fetch("https://api-vivaline.onrender.com/Comercios", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -13,7 +13,7 @@ const Status = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('https://api-vivaline.onrender.com/statuslinhas', {  
+    fetch('https://api-vivaline.onrender.com/StatusLinhas', {  
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': '1234', // sua API key
