@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 interface Estacao {
   numeroEstacao?: number;
   nome: string;
-  lat: number;
-  lng: number;
   horarioFuncionamento: string;
   descricao: string;
 }
@@ -15,36 +13,27 @@ const EstacoesCrud = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Para buscar por númeroEstacao
   const [buscarNumero, setBuscarNumero] = useState("");
   const [estacaoEncontrada, setEstacaoEncontrada] = useState<Estacao | null>(null);
 
-  // Para criar nova estação
   const [novaEstacao, setNovaEstacao] = useState<Estacao>({
     nome: "",
-    lat: 0,
-    lng: 0,
     horarioFuncionamento: "",
     descricao: "",
   });
 
-  // Para atualizar estação
   const [atualizarNumero, setAtualizarNumero] = useState("");
   const [estacaoAtualizar, setEstacaoAtualizar] = useState<Estacao>({
     nome: "",
-    lat: 0,
-    lng: 0,
     horarioFuncionamento: "",
     descricao: "",
   });
 
-  // Para deletar estação
   const [deletarNumero, setDeletarNumero] = useState("");
 
   const API_URL = "http://localhost:8080/estacoes";
   const API_KEY = "1234";
 
-  // Listar todas as estações
   const listarTodas = () => {
     setLoading(true);
     setError(null);
@@ -69,7 +58,6 @@ const EstacoesCrud = () => {
       });
   };
 
-  // Buscar estação por número
   const buscarPorNumero = () => {
     if (!buscarNumero) return alert("Informe o número da estação para buscar");
     setError(null);
@@ -98,9 +86,8 @@ const EstacoesCrud = () => {
       });
   };
 
-  // Criar nova estação
   const criarEstacao = () => {
-    const { nome, lat, lng, horarioFuncionamento, descricao } = novaEstacao;
+    const { nome, horarioFuncionamento, descricao } = novaEstacao;
     if (!nome || !horarioFuncionamento || !descricao) {
       return alert("Preencha todos os campos obrigatórios para criar");
     }
@@ -116,7 +103,7 @@ const EstacoesCrud = () => {
       .then((res) => {
         if (res.status === 201) {
           alert("Estação criada com sucesso!");
-          setNovaEstacao({ nome: "", lat: 0, lng: 0, horarioFuncionamento: "", descricao: "" });
+          setNovaEstacao({ nome: "", horarioFuncionamento: "", descricao: "" });
           listarTodas();
         } else {
           throw new Error(`Erro ao criar: ${res.statusText}`);
@@ -125,10 +112,9 @@ const EstacoesCrud = () => {
       .catch((err) => setError(err.message));
   };
 
-  // Atualizar estação pelo número
   const atualizarEstacao = () => {
     if (!atualizarNumero) return alert("Informe o número da estação para atualizar");
-    const { nome, lat, lng, horarioFuncionamento, descricao } = estacaoAtualizar;
+    const { nome, horarioFuncionamento, descricao } = estacaoAtualizar;
     if (!nome || !horarioFuncionamento || !descricao) {
       return alert("Preencha todos os campos obrigatórios para atualizar");
     }
@@ -145,7 +131,7 @@ const EstacoesCrud = () => {
         if (res.ok) {
           alert("Estação atualizada com sucesso!");
           setAtualizarNumero("");
-          setEstacaoAtualizar({ nome: "", lat: 0, lng: 0, horarioFuncionamento: "", descricao: "" });
+          setEstacaoAtualizar({ nome: "", horarioFuncionamento: "", descricao: "" });
           listarTodas();
         } else {
           throw new Error(`Erro ao atualizar: ${res.statusText}`);
@@ -154,7 +140,6 @@ const EstacoesCrud = () => {
       .catch((err) => setError(err.message));
   };
 
-  // Deletar estação pelo número
   const deletarEstacao = () => {
     if (!deletarNumero) return alert("Informe o número da estação para deletar");
     setError(null);
@@ -188,7 +173,6 @@ const EstacoesCrud = () => {
         <p className="text-red-600 font-semibold mb-4">Erro: {error}</p>
       )}
 
-      {/* Listar todas */}
       <section className="mb-10">
         <button
           onClick={listarTodas}
@@ -205,8 +189,6 @@ const EstacoesCrud = () => {
               <li key={e.numeroEstacao} className="border p-4 rounded">
                 <strong>{e.nome}</strong> <br />
                 Número: {e.numeroEstacao} <br />
-                Latitude: {e.lat} <br />
-                Longitude: {e.lng} <br />
                 Horário: {e.horarioFuncionamento} <br />
                 Descrição: {e.descricao}
               </li>
@@ -215,7 +197,6 @@ const EstacoesCrud = () => {
         )}
       </section>
 
-      {/* Buscar por número */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-2">Buscar Estação por Número</h2>
         <input
@@ -235,15 +216,12 @@ const EstacoesCrud = () => {
           <div className="mt-4 border p-4 rounded bg-gray-100">
             <p><strong>{estacaoEncontrada.nome}</strong></p>
             <p>Número: {estacaoEncontrada.numeroEstacao}</p>
-            <p>Latitude: {estacaoEncontrada.lat}</p>
-            <p>Longitude: {estacaoEncontrada.lng}</p>
             <p>Horário: {estacaoEncontrada.horarioFuncionamento}</p>
             <p>Descrição: {estacaoEncontrada.descricao}</p>
           </div>
         )}
       </section>
 
-      {/* Criar nova estação */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-2">Adicionar Nova Estação</h2>
         <input
@@ -251,20 +229,6 @@ const EstacoesCrud = () => {
           placeholder="Nome"
           value={novaEstacao.nome}
           onChange={(e) => setNovaEstacao({ ...novaEstacao, nome: e.target.value })}
-          className="border p-2 rounded mr-2 mb-2"
-        />
-        <input
-          type="number"
-          placeholder="Latitude"
-          value={novaEstacao.lat}
-          onChange={(e) => setNovaEstacao({ ...novaEstacao, lat: parseFloat(e.target.value) })}
-          className="border p-2 rounded mr-2 mb-2"
-        />
-        <input
-          type="number"
-          placeholder="Longitude"
-          value={novaEstacao.lng}
-          onChange={(e) => setNovaEstacao({ ...novaEstacao, lng: parseFloat(e.target.value) })}
           className="border p-2 rounded mr-2 mb-2"
         />
         <input
@@ -308,20 +272,6 @@ const EstacoesCrud = () => {
           className="border p-2 rounded mr-2 mb-2"
         />
         <input
-          type="number"
-          placeholder="Latitude"
-          value={estacaoAtualizar.lat}
-          onChange={(e) => setEstacaoAtualizar({ ...estacaoAtualizar, lat: parseFloat(e.target.value) })}
-          className="border p-2 rounded mr-2 mb-2"
-        />
-        <input
-          type="number"
-          placeholder="Longitude"
-          value={estacaoAtualizar.lng}
-          onChange={(e) => setEstacaoAtualizar({ ...estacaoAtualizar, lng: parseFloat(e.target.value) })}
-          className="border p-2 rounded mr-2 mb-2"
-        />
-        <input
           type="text"
           placeholder="Horário de Funcionamento"
           value={estacaoAtualizar.horarioFuncionamento}
@@ -345,14 +295,14 @@ const EstacoesCrud = () => {
       </section>
 
       {/* Deletar estação */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Deletar Estação por Número</h2>
+      <section className="mb-10">
+        <h2 className="text-xl font-semibold mb-2">Deletar Estação</h2>
         <input
           type="number"
           placeholder="Número da Estação"
           value={deletarNumero}
           onChange={(e) => setDeletarNumero(e.target.value)}
-          className="border p-2 rounded mr-2"
+          className="border p-2 rounded mr-2 mb-2"
         />
         <button
           onClick={deletarEstacao}

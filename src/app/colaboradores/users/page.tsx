@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 
 interface User {
   id?: number;
@@ -42,7 +42,6 @@ const UsersCrud = () => {
     setLoading(true);
     setError(null);
     fetch(API_URL, {
-      method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": API_KEY,
@@ -52,21 +51,15 @@ const UsersCrud = () => {
         if (!res.ok) throw new Error(`Erro ao listar: ${res.statusText}`);
         return res.json();
       })
-      .then((data) => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+      .then((data) => setUsers(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   };
 
   const buscarPorId = () => {
     if (!buscarId) return alert("Informe um ID para buscar");
     setError(null);
     fetch(`${API_URL}/${buscarId}`, {
-      method: "GET",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": API_KEY,
@@ -86,9 +79,8 @@ const UsersCrud = () => {
 
   const criarUser = () => {
     const { nome, email, senha } = novoUser;
-    if (!nome || !email || !senha) {
-      return alert("Preencha todos os campos para criar");
-    }
+    if (!nome || !email || !senha) return alert("Preencha todos os campos");
+
     setError(null);
     fetch(API_URL, {
       method: "POST",
@@ -105,7 +97,7 @@ const UsersCrud = () => {
           listarTodos();
         } else if (res.status === 409) {
           return res.json().then((data) => {
-            throw new Error(data || "Conflito ao criar usuário");
+            throw new Error(data?.message || "Conflito ao criar usuário");
           });
         } else {
           throw new Error(`Erro ao criar: ${res.statusText}`);
@@ -117,9 +109,8 @@ const UsersCrud = () => {
   const atualizarUser = () => {
     const { nome, email, senha } = userAtualizar;
     if (!atualizarId) return alert("Informe o ID para atualizar");
-    if (!nome || !email || !senha) {
-      return alert("Preencha todos os campos para atualizar");
-    }
+    if (!nome || !email || !senha) return alert("Preencha todos os campos");
+
     setError(null);
     fetch(`${API_URL}/${atualizarId}`, {
       method: "PUT",
@@ -136,7 +127,7 @@ const UsersCrud = () => {
           setUserAtualizar({ nome: "", email: "", senha: "" });
           listarTodos();
         } else if (res.status === 404) {
-          throw new Error("Usuário não encontrado para atualizar");
+          throw new Error("Usuário não encontrado");
         } else {
           throw new Error(`Erro ao atualizar: ${res.statusText}`);
         }
@@ -146,6 +137,7 @@ const UsersCrud = () => {
 
   const deletarUser = () => {
     if (!deletarId) return alert("Informe o ID para deletar");
+
     setError(null);
     fetch(`${API_URL}/${deletarId}`, {
       method: "DELETE",
@@ -159,7 +151,7 @@ const UsersCrud = () => {
           setDeletarId("");
           listarTodos();
         } else if (res.status === 404) {
-          throw new Error("Usuário não encontrado para deletar");
+          throw new Error("Usuário não encontrado");
         } else {
           throw new Error(`Erro ao deletar: ${res.statusText}`);
         }
@@ -170,6 +162,14 @@ const UsersCrud = () => {
   useEffect(() => {
     listarTodos();
   }, []);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    setState: (val: User) => void,
+    state: User
+  ) => {
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
 
   return (
     <main className="p-8 max-w-4xl mx-auto">
@@ -228,10 +228,11 @@ const UsersCrud = () => {
         {["nome", "email", "senha"].map((field) => (
           <input
             key={field}
+            name={field}
             type={field === "email" ? "email" : "text"}
             placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
             value={(novoUser as any)[field]}
-            onChange={(e) => setNovoUser({ ...novoUser, [field]: e.target.value })}
+            onChange={(e) => handleChange(e, setNovoUser, novoUser)}
             className="border p-2 rounded mr-2 mb-2"
           />
         ))}
@@ -257,10 +258,11 @@ const UsersCrud = () => {
         {["nome", "email", "senha"].map((field) => (
           <input
             key={field}
+            name={field}
             type={field === "email" ? "email" : "text"}
             placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
             value={(userAtualizar as any)[field]}
-            onChange={(e) => setUserAtualizar({ ...userAtualizar, [field]: e.target.value })}
+            onChange={(e) => handleChange(e, setUserAtualizar, userAtualizar)}
             className="border p-2 rounded mr-2 mb-2"
           />
         ))}

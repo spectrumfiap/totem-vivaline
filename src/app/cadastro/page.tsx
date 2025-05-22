@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Footer from "@/components/Footer/page"; // ajuste o path se necessário
 
 const Cadastro = () => {
   const [form, setForm] = useState({ nome: "", email: "", senha: "" });
@@ -15,7 +14,7 @@ const Cadastro = () => {
   };
 
   const validate = () => {
-    let formErrors = { nome: "", email: "", senha: "" };
+    const formErrors  = { nome: "", email: "", senha: "" };
     let isValid = true;
 
     if (!form.nome) {
@@ -155,8 +154,6 @@ const Cadastro = () => {
           </form>
         </div>
       </main>
-
-      
     </div>
   );
 };

@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-// import Footer from "@/components/Footer/page"; // ajuste o caminho se quiser usar
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -25,8 +24,8 @@ const Login = () => {
           "Content-Type": "application/json",
           "x-api-key": "1234", // sua chave API
         },
-        body: JSON.stringify({ email: form.email, senha: form.password }), // backend espera "senha"
-        credentials: "include", // muito importante para enviar/receber cookie HttpOnly
+        body: JSON.stringify({ email: form.email, senha: form.password }),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -34,13 +33,15 @@ const Login = () => {
         throw new Error(msg || "E-mail ou senha inválidos.");
       }
 
-      // Não tenta pegar token, pois o JWT está em cookie HttpOnly
-
       alert("Login realizado com sucesso!");
-      router.push("/"); // ou rota protegida
+      router.push("/");
 
-    } catch (err: any) {
-      setError(err.message || "Erro no login.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Erro no login.");
+      } else {
+        setError("Erro desconhecido no login.");
+      }
     } finally {
       setIsSubmitting(false);
     }

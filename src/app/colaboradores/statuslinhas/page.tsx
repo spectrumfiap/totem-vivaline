@@ -56,13 +56,16 @@ const StatusLinhasCrud = () => {
         return res.json();
       })
       .then((data) => {
-        setStatusLinhas(data);
+        if (Array.isArray(data)) {
+          setStatusLinhas(data);
+        } else {
+          setError("Resposta da API não é uma lista");
+          setStatusLinhas([]);
+        }
         setLoading(false);
+        console.log("Resposta da API:", data); 
       })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+      ;
   };
 
   const buscarPorId = () => {
