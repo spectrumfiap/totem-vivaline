@@ -1,5 +1,4 @@
 "use client";
-import { API_KEY, API_URL } from "@/app/services/api";
 import React, { useEffect, useState } from "react";
 
 interface Estacao {
@@ -31,6 +30,9 @@ const EstacoesCrud = () => {
   });
 
   const [deletarNumero, setDeletarNumero] = useState("");
+
+  const API_URL = "https://api-vivaline.onrender.com/Estacoes";
+  const API_KEY = "1234";
 
   const listarTodas = () => {
     setLoading(true);

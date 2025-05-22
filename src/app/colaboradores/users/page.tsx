@@ -31,7 +31,7 @@ const UsersCrud = () => {
 
   const [deletarId, setDeletarId] = useState("");
 
-  const API_URL = "http://localhost:8080/users";
+  const API_URL = "https://api-vivaline.onrender.com/users";
   const API_KEY = "1234";
 
   const listarTodos = () => {

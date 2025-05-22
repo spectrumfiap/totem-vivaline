@@ -1,5 +1,4 @@
 "use client";
-import { API_KEY, API_URL } from "@/app/services/api";
 import React, { useEffect, useState, ChangeEvent } from "react";
 
 interface LinhaStatus {
@@ -34,6 +33,9 @@ const StatusLinhasCrud = () => {
   });
 
   const [deletarId, setDeletarId] = useState("");
+
+  const API_URL = "https://api-vivaline.onrender.com/StatusLinhas";
+  const API_KEY = "1234";
 
   const listarTodos = () => {
     setLoading(true);
