@@ -159,9 +159,7 @@ const UsersCrud = () => {
     listarTodos();
   }, []);
 
-  const handleChange = <
-    K extends keyof User
-  >(
+  const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     setState: (val: User) => void,
     state: User
