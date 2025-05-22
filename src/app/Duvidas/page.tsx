@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -22,7 +22,7 @@ export default function FAQ() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'X-Api-Key': '1234'
+        'X-API-Key': '1234'
       },
     })
       .then((res) => {

@@ -1,84 +1,60 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
-interface Comercio {
+type Comercio = {
   nome: string;
   endereco: string;
   telefone: string;
-}
+};
 
-const ComerciosLocais = () => {
+const AsideComercios = () => {
   const [comercios, setComercios] = useState<Comercio[]>([]);
 
   useEffect(() => {
-    fetch("https://api-vivaline.onrender.com/comercios", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": "1234",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Dados recebidos:", data);
+    const fetchComercios = async () => {
+      try {
+        const res = await fetch("https://api-vivaline.onrender.com/comercios", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Api-Key": "1234",
+          },
+        });
+
+        if (!res.ok) throw new Error("Erro ao buscar comércios");
+
+        const data: Comercio[] = await res.json();
         setComercios(data);
-      })
-      .catch((err) => console.error("Erro ao buscar comércios:", err));
+      } catch (error) {
+        console.error("Erro ao buscar comércios:", error);
+      }
+    };
+
+    fetchComercios();
   }, []);
 
   return (
-    <main className="flex-1 flex flex-col items-center px-8 py-10">
-      <div className="w-full max-w-4xl">
-        {/* Logo + Título */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <Image
-            className="w-10 md:w-14"
-            src="/assets/ViaMobilidade.svg"
-            alt="ViaMobilidade"
-            width={50}
-            height={50}
-          />
-          <h1 className="text-2xl md:text-4xl font-semibold">
-            Estação Paulista
-          </h1>
-        </div>
+    <aside className="font-Kanit flex flex-col h-screen border-r w-[45%] sm:w-[25%] md:w-[30%] lg:w-[35%]">
+      <h2 className="bg-[#ffffff] text-black text-[1.1rem] lg:text-[2rem] md:text-[2rem] text-center p-6 border-b border-black">
+        COMÉRCIOS <span>LOCAIS</span>
+      </h2>
 
-        {/* Imagem decorativa */}
-        <div className="mb-10 flex justify-center">
-          <Image
-            src="/assets/chillibeans.jpg" // 
-            alt="Imagem da Estação Paulista"
-            width={800}
-            height={400}
-            className="rounded-2xl shadow-lg"
-          />
-        </div>
-
-        {/* Lista de comércios */}
-        {comercios.length > 0 ? (
-          comercios.map((comercio, index) => (
-            <div
-              key={index}
-              className="mb-10 p-6 rounded-2xl shadow-md bg-white text-center"
-            >
-              <h2 className="text-xl md:text-2xl font-medium">
-                Loja {index + 1}: {comercio.nome}
-              </h2>
-              <p className="text-base md:text-lg mt-2">
-                Endereço: {comercio.endereco}
-              </p>
-              <p className="text-sm md:text-base mt-1">
-                Telefone: {comercio.telefone}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500 text-center mt-6">Carregando comércios...</p>
-        )}
-      </div>
-    </main>
+      <ul className="flex-1 overflow-y-auto">
+        {comercios.map((comercio, index) => (
+          <li
+            key={index}
+            className="px-4 py-6 border-b border-black sm:px-1 sm:py-2 md:px-2 md:py-4 lg:px-4 lg:py-6 bg-[#f4f7f7]"
+          >
+            <h2 className="sm:text-sm md:text-md lg:text-[1.2rem] font-semibold">
+              {comercio.nome}
+            </h2>
+            <span className="text-sm block mt-1">📍 {comercio.endereco}</span>
+            <span className="text-sm block mt-1">📞 {comercio.telefone}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
   );
 };
 
-export default ComerciosLocais;
+export default AsideComercios;

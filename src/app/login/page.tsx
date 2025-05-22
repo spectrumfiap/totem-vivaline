@@ -22,7 +22,7 @@ const Login = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "1234", // sua chave API
+          "X-API-Key": "1234", // sua chave API
         },
         body: JSON.stringify({ email: form.email, senha: form.password }),
         credentials: "include",

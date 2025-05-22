@@ -17,7 +17,7 @@ const Aside = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "X-Api-Key": "1234", // se você tiver um filtro de segurança
+            "X-Api-Key": "1234",
           },
         });
 

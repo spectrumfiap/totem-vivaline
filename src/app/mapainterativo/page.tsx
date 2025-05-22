@@ -138,7 +138,7 @@ const MapaGoogle = () => {
   }, []);
 
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+    <LoadScript googleMapsApiKey="AIzaSyAuk2FvGEkh7dLim8PmMc29ZTX1WY1AKKs">
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
