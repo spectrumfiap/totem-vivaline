@@ -2,6 +2,7 @@
 
 ## 🔗 Links
 **Demonstração do projeto disponível em vídeo: [Clique aqui para assistir](https://youtu.be/nwv4O9QCr_E)**
+
 **Para acessar o site você também pode clicar [AQUI](https://totem-vivaline.vercel.app/)**
 
 ---
